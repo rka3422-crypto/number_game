@@ -22,10 +22,12 @@ else:
 guess = st.number_input('1~100 사이의 수', min_value=1,
 max_value=100, step=1)
 
+
 # ④ [확인] 버튼을 눌렀을 때만 판정
 if st.button('확인', disabled=st.session_state.done):
     st.session_state.tries += 1
     answer = st.session_state.answer
+
     if guess < answer:
         st.session_state.msg = f'{guess} → UP! ⬆'
     elif guess > answer:
@@ -34,11 +36,13 @@ if st.button('확인', disabled=st.session_state.done):
         tries = st.session_state.tries
         st.session_state.msg = f'정답! {tries}번 만에 맞혔습니다.'
         st.session_state.done = True
-    if best == 0 or tries < best:
-        save_best('best.txt', tries)
-        st.session_state.msg += ' 🎉 최고 기록 갱신!'
+
+        # 정답을 맞혔을 때만 최고 기록 확인
+        if best == 0 or tries < best:
+            save_best('best.txt', tries)
+            st.session_state.msg += ' 🎉 최고 기록 갱신!'
+
     st.rerun()
-    
 # ⑤ 결과 보여 주기
 st.info(st.session_state.msg)
 st.write(f'시도 횟수 : {st.session_state.tries}번')
